@@ -1,0 +1,144 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>com.mas.spring.mvc</groupId>
+  <artifactId>OAuth2SpringSecurity</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>OAuth2SpringSecurity</name>
+  
+  <properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<springframework.version>4.3.4.RELEASE</springframework.version>
+	<springsecurity.version>4.1.1.RELEASE</springsecurity.version>
+	<springsecurityoauth2.version>2.0.10.RELEASE</springsecurityoauth2.version>
+	<jackson.library>2.7.5</jackson.library>
+  </properties>
+  
+  <dependencies>
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${springsecurity.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${springsecurity.version}</version>
+		</dependency>
+
+		<!-- Spring Security OAuth2-->
+		<dependency>
+		    <groupId>org.springframework.security.oauth</groupId>
+		    <artifactId>spring-security-oauth2</artifactId>
+		    <version>${springsecurityoauth2.version}</version>
+		</dependency>
+
+		<!-- Jackson libraries -->
+		<dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.library}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson.library}</version>
+        </dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+	</dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <!--<warSourceDirectory>WebContent</warSourceDirectory>-->
+          <warSourceDirectory>src/main/webapp</warSourceDirectory>
+          <warName>OAuth2SpringSecurity</warName>
+		  <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+      
+      
+      <!--  create the manifest -->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<source>2.0.0</source>
+					<target>2.0.0</target>
+					<manifestLocation>${project.build.directory}/${project.build.finalName}/META-INF</manifestLocation>
+					<supportedProjectTypes>
+						<supportedProjectType>jar</supportedProjectType> 
+						<supportedProjectType>bundle</supportedProjectType>
+						<supportedProjectType>war</supportedProjectType>
+					</supportedProjectTypes>
+					<instructions>
+						<!--
+							for MANIFEST.MF to be created by build, it must not already exist
+							in source directory
+						-->
+						<Bundle-Name>HTTP Interface Application Bundle</Bundle-Name>
+						<Bundle-SymbolicName>com.delphidisplay.insight.ocs-http</Bundle-SymbolicName>
+						<Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+						<Import-Package>
+ 							*;-split-package:=merge-last</Import-Package>
+						<Import-Library>org.springframework.spring;version="[${springframework_bundle_version},${springframework_bundle_version}]"</Import-Library>						
+						<Import-Bundle>com.delphidisplay.insight.common;version="[${project_version},${project_version}]",org.springframework.security.core;version="[${spring_security_bundle_version},${spring_security_bundle_version}]",com.springsource.org.apache.commons.codec;version="[${apache_commons_codec_bundle_version},${apache_commons_codec_bundle_version}]",org.springframework.osgi.core;version="[${springramework_osgi_core_version},${springramework_osgi_core_version}]",org.eclipse.virgo.web.dm;version="[${dm_server_version},${dm_server_version}]",com.springsource.org.hibernate;version="${hibernate_bundle_version}"</Import-Bundle>
+						<Export-Package>!*</Export-Package> 
+						<Web-ContextPath>ocs</Web-ContextPath>
+					</instructions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+    </plugins>
+  </build>
+</project>
